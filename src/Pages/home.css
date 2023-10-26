@@ -10,12 +10,13 @@
   display: flex;
   flex-direction: row; /* Change to row for horizontal alignment */
   align-items: center;
+  margin-top: 20px;
 }
 
 .image_search input[type="file"] {
   margin: 10px;
   padding: 10px;
-  background-color: #df9999;
+  background-color: #0c407b;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -23,25 +24,27 @@
 }
 
 .image_search input[type="file"]:hover {
-  background-color: #9ce1ed;
+  background-color: #3378b0;
 }
 
 
 /* Style the label to resemble a button */
-.image_search label {
+.image_search label  {
   margin: 10px;
-  padding: 10px;
-  background-color: #df9999;
+  padding: 10px ;
+  background-color: #d54b4b;
   border: none;
+  color: white;
   border-radius: 5px;
   cursor: pointer;
   display: flex;
   align-items: center;
+  transition:background-color 0.3s ;
 }
 
 /* Style the label on hover */
 .image_search label:hover {
-  background-color: #9ce1ed;
+  background-color: #4f98e1;
 }
 
 .image_search p {
@@ -50,7 +53,8 @@
 
 /* Style the icon within the label */
 .search-icon {
-  margin-right: 5px; /* Add some space between the icon and the text */
+  margin-right: 5px; 
+  color: wheat;/* Add some space between the icon and the text */
 }
 
 .image-preview {
@@ -65,5 +69,28 @@
   width: 100%;
   height: 100%;
   object-fit: cover; /* Maintain the aspect ratio and cover the container */
+}
+
+.camera-search-button {
+  margin-left: 10px; /* Add space between the file input and button */
+  background-color: #341ccf; /* Set your desired background color */
+  color: white; /* Set text color to white */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 10px 15px; /* Adjust padding */
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s; /* Add a smooth background color transition */
+}
+
+.camera-search-button:hover {
+background-color: #3d67b0;
+
+}
+
+/* Style the camera icon within the button */
+.camera-icon {
+  margin-right: 5px; /* Add space between the icon and the text */
 }
 

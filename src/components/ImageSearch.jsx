@@ -16,54 +16,79 @@ function ImageSearch() {
   const handleCameraSearch = () => {
     navigator.mediaDevices
       .getUserMedia({ video: true })
-      .then((stream) => {
-      //   (async () => {
-      //     const capturedImage = await captureImageFromCamera(stream);
-      //     makeAPICall(capturedImage);
-      //     stream.getTracks().forEach((track) => {
-      //       track.stop();
-      //     });
-      //   })();
-      // })
-      // .catch((error) => {
-      //   console.error('Camera access error:', error);
-      // });
+      .then(async (stream) => {
+        const capturedImage = await captureImageFromCamera(stream);
+        makeAPICall(capturedImage);
+        stream.getTracks().forEach((track) => {
+          track.stop();
+        });
+      })
+      .catch((error) => {
+        console.error('Camera access error:', error);
+      });
+  };
+
+  const captureImageFromCamera = (stream) => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
   
-    })
-    .catch((error) => {
-      console.error('Camera access error:', error);
+      video.srcObject = stream;
+      video.onloadedmetadata = () => {
+        video.play();
+  
+        // Set canvas dimensions to match video stream
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+  
+        // Capture a frame from the video and draw it on the canvas
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  
+        // Stop the video stream
+        video.srcObject.getTracks().forEach((track) => track.stop());
+  
+        // Convert the captured image on the canvas to a Blob (e.g., in JPEG format)
+        canvas.toBlob(
+          (blob) => {
+            // Resolve the Promise with the captured image as a Blob
+            resolve(blob);
+          },
+          'image/jpeg', // Specify the desired image format
+          0.9 // Image quality (0.0 to 1.0)
+        );
+      };
     });
-};
+  };
+  
+  const makeAPICall = async (imageData) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', imageData); // Use the correct form field name
 
-const makeAPICall = async (imageData) => {
-  try {
-    const formData = new FormData();
-    formData.append('image', imageData);
+      setIsLoading(true);
 
-    setIsLoading(true);
+      const response = await axios.post(
+        'https://api-inference.thenujan-vpr-deploy.hf.space/', // Update to your GCP model endpoint
+        formData
+      );
 
-    const response = await axios.post(
-      'https://huggingface.co/spaces/Thenujan/VPR_deploy/predict',
-      formData
-    );
-
-    if (response.status === 200) {
-      if (response.data && Array.isArray(response.data)) {
-        setSimilarImageIds(response.data);
+      if (response.status === 200) {
+        if (response.data && Array.isArray(response.data)) {
+          setSimilarImageIds(response.data);
+        } else {
+          console.error('Invalid response data');
+        }
       } else {
-        console.error('Invalid response data');
+        console.error('API request failed with status code', response.status);
       }
-    } else {
-      console.error('API request failed with status code', response.status);
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error('API request failed:', error);
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
-  } catch (error) {
-    console.error('API request failed:', error);
-    setIsLoading(false);
-  }
-};
-
+  };
 
   useEffect(() => {
     if (selectedImage) {

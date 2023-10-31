@@ -8,11 +8,17 @@ import Home from './Pages/Home';
 const App = () => {
   return (
 
-    <>
-    <Navbar/>
-    <Home/>
-    
-    </>
+    <div>
+      <BrowserRouter>
+      <Navbar/>
+      <Routes>
+      <Route index element={<Home/>}/>
+        {/* <Route path='about' element={<About/>}/>
+        <Route path='contact' element={<Contact/>}/>
+        <Route path='explore' element={<Explore/>}/> */}
+      </Routes>
+      </BrowserRouter>
+    </div>
   )
 }
 

@@ -43,7 +43,7 @@ const makeAPICall = async (imageData) => {
     setIsLoading(true);
 
     const response = await axios.post(
-      'https://huggingface.co/spaces/Thenujan/VPR_deploy',
+      'https://huggingface.co/spaces/Thenujan/VPR_deploy/predict',
       formData
     );
 
